@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        //  'details': (context) => const DetailsScreen()
+         // 'details': (context) => const DetailsScreen(),
       },
       debugShowCheckedModeBanner: false,
       home: const HomeScreen(),

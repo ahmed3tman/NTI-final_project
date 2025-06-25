@@ -7,7 +7,7 @@ class LapCubit extends Cubit<LapState> {
 
   getLaps() async {
     emit(LapLoading());
-
-    emit(LapLoaded(await getLapData()));
+    final data = await getLapData();
+    emit(LapLoaded(data));
   }
 }
