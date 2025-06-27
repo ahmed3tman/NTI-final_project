@@ -1,4 +1,5 @@
-import 'package:api_cubit_task/core/features/model/user_model.dart';
+
+import 'package:api_cubit_task/core/features/home/model/lap_model.dart';
 
 abstract class LapState {}
 
@@ -12,4 +13,5 @@ class LapLoaded extends LapState {
   LapLoaded( this.lapList);
 }
 class LapError extends LapState {
+  LapError(String string);
 }

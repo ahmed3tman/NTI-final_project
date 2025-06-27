@@ -1,4 +1,4 @@
-import 'package:api_cubit_task/core/features/view/screen/home_screen.dart';
+import 'package:api_cubit_task/core/features/home/view/screen/splash_sreen.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
          // 'details': (context) => const DetailsScreen(),
       },
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
