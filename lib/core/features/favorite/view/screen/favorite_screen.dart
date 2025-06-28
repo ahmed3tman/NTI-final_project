@@ -37,48 +37,21 @@ class FavoriteScreen extends StatelessWidget {
       ),
       body: BlocBuilder<FavCubit, FavState>(
         builder: (context, state) {
-          if (state is FavInitial) {
-            return _buildEmptyState(context);
-          }
 
+           if (state is FavLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }else
           if (state is FavLoaded) {
-            if (state.favoriteList.isEmpty) {
-              return _buildEmptyState(context);
-            }
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.grey[50]!, Colors.white],
-                ),
-              ),
-              child: ListView.builder(
-                padding: const EdgeInsets.only(top: 15),
-                itemCount: state.favoriteList.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: LapCard(laptop: state.favoriteList[index]),
-                  );
-                },
-              ),
+            return ListView.builder(
+              itemCount: state.list.length,
+              itemBuilder: (context, index) {
+                return LapCard(laptop: state.list[index]);
+              },
             );
           }
-
+          
           if (state is FavError) {
             return Center(
               child: Column(

@@ -4,10 +4,14 @@ abstract class FavState {}
 
 class FavInitial extends FavState {}
 
-class FavLoaded extends FavState {
-  final List<LapModel> favoriteList;
+class FavLoading extends FavState {}
 
-  FavLoaded(this.favoriteList);
+class FavLoaded extends FavState {
+
+  
+  final List<LapModel> list;
+
+  FavLoaded(this.list);
 }
 
 class FavError extends FavState {}

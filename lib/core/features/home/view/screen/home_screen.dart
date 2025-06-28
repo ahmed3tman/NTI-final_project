@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      
       create: (context) => LapCubit()..getLaps(),
       child: Scaffold(
         backgroundColor: Colors.grey[50],

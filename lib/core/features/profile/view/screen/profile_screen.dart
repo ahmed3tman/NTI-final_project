@@ -112,53 +112,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    // Show coming soon message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Row(
-                          children: [
-                            Icon(Icons.info, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text(
-                              'Profile editing feature coming soon!',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        backgroundColor: Colors.blue,
-                        duration: const Duration(seconds: 1),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        margin: const EdgeInsets.only(
-                          left: 22,
-                          right: 22,
-                          bottom: 80,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.edit_outlined, size: 24),
-                  label: const Text(
-                    'Edit Profile',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.white,
-                    shadowColor: Colors.transparent,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                ),
               ),
             ],
           ),

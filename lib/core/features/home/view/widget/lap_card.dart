@@ -88,66 +88,31 @@ class _LapCardState extends State<LapCard> {
                           ),
                           BlocBuilder<FavCubit, FavState>(
                             builder: (context, state) {
-                              final isFav = context.read<FavCubit>().isFavorite(
-                                laptop.id,
-                              );
+                              bool isFavorite = false;
+                              if (state is FavLoaded) {
+                                isFavorite = state.list.any(
+                                  (fav) => fav.id == laptop.id,
+                                );
+                              }
+
                               return IconButton(
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
-
-                                icon: Icon(
-                                  isFav
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: isFav ? Colors.red : Colors.black26,
-                                  size: 28,
-                                ),
+                                //==============================================================================
                                 onPressed: () {
-                                  context.read<FavCubit>().toggleFav(laptop);
-
-                                  ScaffoldMessenger.of(
-                                    context,
-                                  ).hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      elevation: 5,
-                                      content: Row(
-                                        children: [
-                                          Icon(
-                                            isFav
-                                                ? Icons.heart_broken
-                                                : Icons.favorite,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              isFav
-                                                  ? 'Removed ${laptop.name} from favorites'
-                                                  : 'Added ${laptop.name} to favorites',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      backgroundColor: isFav
-                                          ? Colors.orange
-                                          : Colors.green,
-                                      duration: const Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      margin: const EdgeInsets.only(
-                                        left: 22,
-                                        right: 22,
-                                        bottom: 80,
-                                      ),
-                                    ),
+                                  context.read<FavCubit>().toggleFav(
+                                    lapId: laptop.id,
                                   );
                                 },
+                                icon: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isFavorite
+                                      ? Colors.red
+                                      : Colors.black26,
+                                  size: 28,
+                                ),
                               );
                             },
                           ),
