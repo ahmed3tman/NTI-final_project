@@ -1,7 +1,10 @@
+import 'package:api_cubit_task/core/features/cart/cubit/cart_cubit.dart';
 import 'package:api_cubit_task/core/features/details/view/screen/details_screen.dart';
+import 'package:api_cubit_task/core/features/favorite/cubit/fav_cubit.dart';
 import 'package:api_cubit_task/core/features/favorite/view/widget/delete_button.dart';
 import 'package:api_cubit_task/core/features/home/model/lap_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LapCard extends StatefulWidget {
   const LapCard({super.key, required this.laptop});
@@ -26,7 +29,13 @@ class _LapCardState extends State<LapCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DetailsScreen(laptop: laptop),
+              builder: (newContext) => MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: context.read<CartCubit>()),
+                  BlocProvider.value(value: context.read<FavCubit>()),
+                ],
+                child: DetailsScreen(laptop: laptop),
+              ),
             ),
           );
         },
@@ -40,7 +49,6 @@ class _LapCardState extends State<LapCard> {
           ),
           child: Row(
             children: [
-              // Laptop Image
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ClipRRect(
@@ -59,7 +67,6 @@ class _LapCardState extends State<LapCard> {
                   ),
                 ),
               ),
-              // Details
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -69,7 +76,6 @@ class _LapCardState extends State<LapCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name & Company + Fav Button
                       Row(
                         children: [
                           Expanded(
@@ -84,7 +90,6 @@ class _LapCardState extends State<LapCard> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          //================================================
                           FavoriteButton(laptopId: laptop.id),
                         ],
                       ),

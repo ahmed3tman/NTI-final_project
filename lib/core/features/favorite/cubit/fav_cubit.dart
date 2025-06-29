@@ -1,14 +1,26 @@
 import 'package:api_cubit_task/core/features/favorite/cubit/fav_state.dart';
-import 'package:api_cubit_task/core/features/favorite/model/fav_data.dart';
+import 'package:api_cubit_task/core/features/favorite/data/fav_data.dart';
 import 'package:api_cubit_task/core/features/home/model/lap_model.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FavCubit extends Cubit<FavState> {
   FavCubit() : super(FavInitial());
 
+  getFavorites() async {
+    emit(FavLoading());
+
+    try {
+      List<LapModel> favorites = await FavoriteData.getFav();
+      emit(
+        FavLoaded(favorites, addingItems: const {}, deletingItems: const {}),
+      );
+    } catch (e) {
+      print('Error in getFavorites: $e');
+      emit(FavError());
+    }
+  }
+
   addFav({required String lapId}) async {
-    // إضافة العنصر لقائمة العناصر اللي بيتم إضافتها
     if (state is FavLoaded) {
       final currentState = state as FavLoaded;
       emit(
@@ -21,14 +33,13 @@ class FavCubit extends Cubit<FavState> {
     }
 
     try {
-      bool success = await FavoriteService.addToFav(lapId);
+      bool success = await FavoriteData.addToFav(lapId);
       if (success) {
-        List<LapModel> favorites = await FavoriteService.getFavorites();
+        List<LapModel> favorites = await FavoriteData.getFav();
         emit(
           FavLoaded(favorites, addingItems: const {}, deletingItems: const {}),
         );
       } else {
-        // في حالة الفشل، إزالة العنصر من قائمة الإضافة
         if (state is FavLoaded) {
           final currentState = state as FavLoaded;
           final newAddingItems = Set<String>.from(currentState.addingItems);
@@ -39,7 +50,6 @@ class FavCubit extends Cubit<FavState> {
       }
     } catch (e) {
       print('Error in addFav: $e');
-      // في حالة الخطأ، إزالة العنصر من قائمة الإضافة
       if (state is FavLoaded) {
         final currentState = state as FavLoaded;
         final newAddingItems = Set<String>.from(currentState.addingItems);
@@ -50,21 +60,7 @@ class FavCubit extends Cubit<FavState> {
     }
   }
 
-  getFavorites() async {
-    emit(FavLoading());
-    try {
-      List<LapModel> favorites = await FavoriteService.getFavorites();
-      emit(
-        FavLoaded(favorites, addingItems: const {}, deletingItems: const {}),
-      );
-    } catch (e) {
-      print('Error in getFavorites: $e');
-      emit(FavError());
-    }
-  }
-
   deleteFav({required String lapId}) async {
-    // إضافة العنصر لقائمة العناصر اللي بيتم حذفها
     if (state is FavLoaded) {
       final currentState = state as FavLoaded;
       emit(
@@ -75,15 +71,13 @@ class FavCubit extends Cubit<FavState> {
     }
 
     try {
-      bool success = await FavoriteService.deleteFromFav(lapId);
+      bool success = await FavoriteData.deleteFromFav(lapId);
       if (success) {
-        // جلب القائمة المحدثة وإزالة العنصر من قائمة الحذف
-        List<LapModel> favorites = await FavoriteService.getFavorites();
+        List<LapModel> favorites = await FavoriteData.getFav();
         emit(
           FavLoaded(favorites, addingItems: const {}, deletingItems: const {}),
         );
       } else {
-        // في حالة الفشل، إزالة العنصر من قائمة الحذف
         if (state is FavLoaded) {
           final currentState = state as FavLoaded;
           final newDeletingItems = Set<String>.from(currentState.deletingItems);
@@ -94,7 +88,6 @@ class FavCubit extends Cubit<FavState> {
       }
     } catch (e) {
       print('Error in deleteFav: $e');
-      // في حالة الخطأ، إزالة العنصر من قائمة الحذف
       if (state is FavLoaded) {
         final currentState = state as FavLoaded;
         final newDeletingItems = Set<String>.from(currentState.deletingItems);
@@ -102,20 +95,6 @@ class FavCubit extends Cubit<FavState> {
         emit(currentState.copyWith(deletingItems: newDeletingItems));
       }
       emit(FavError());
-    }
-  }
-
-  // دالة للتبديل بين إضافة وحذف المفضلة
-  toggleFav({required String lapId}) async {
-    if (state is FavLoaded) {
-      final currentState = state as FavLoaded;
-      bool isFavorite = currentState.list.any((fav) => fav.id == lapId);
-
-      if (isFavorite) {
-        deleteFav(lapId: lapId);
-      } else {
-        addFav(lapId: lapId);
-      }
     }
   }
 }

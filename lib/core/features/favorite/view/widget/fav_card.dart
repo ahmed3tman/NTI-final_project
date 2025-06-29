@@ -1,3 +1,4 @@
+import 'package:api_cubit_task/core/features/cart/cubit/cart_cubit.dart';
 import 'package:api_cubit_task/core/features/details/view/screen/details_screen.dart';
 import 'package:api_cubit_task/core/features/favorite/cubit/fav_cubit.dart';
 import 'package:api_cubit_task/core/features/favorite/cubit/fav_state.dart';
@@ -22,14 +23,20 @@ class _FavCardState extends State<FavCard> {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DetailsScreen(laptop: laptop),
+              builder: (newContext) => MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: context.read<CartCubit>()),
+                  BlocProvider.value(value: context.read<FavCubit>()),
+                ],
+                child: DetailsScreen(laptop: laptop),
+              ),
             ),
           );
         },
@@ -43,7 +50,6 @@ class _FavCardState extends State<FavCard> {
           ),
           child: Row(
             children: [
-              // Laptop Image
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ClipRRect(
@@ -62,7 +68,6 @@ class _FavCardState extends State<FavCard> {
                   ),
                 ),
               ),
-              // Details
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -72,7 +77,6 @@ class _FavCardState extends State<FavCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name & Company + Fav Button
                       Row(
                         children: [
                           Expanded(

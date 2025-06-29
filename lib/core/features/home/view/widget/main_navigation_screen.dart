@@ -1,7 +1,12 @@
+import 'package:api_cubit_task/core/features/cart/cubit/cart_cubit.dart';
+import 'package:api_cubit_task/core/features/cart/cubit/cart_state.dart';
 import 'package:api_cubit_task/core/features/favorite/cubit/fav_cubit.dart';
+import 'package:api_cubit_task/core/features/favorite/cubit/fav_state.dart';
 import 'package:api_cubit_task/core/features/favorite/view/screen/favorite_screen.dart';
 import 'package:api_cubit_task/core/features/home/view/screen/home_screen.dart';
 import 'package:api_cubit_task/core/features/profile/view/screen/profile_screen.dart';
+import 'package:api_cubit_task/core/features/cart/view/screen/cart_screen.dart'; // Add this import
+import 'package:api_cubit_task/core/shared/widgets/badge_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
@@ -16,17 +21,19 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  int _currentIndex = 0; // متغير لتتبع الصفحة الحالية
 
   final List<Widget> _screens = [
     const HomeScreen(),
     const FavoriteScreen(),
+    const CartScreen(), // Add cart screen
     const ProfileScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this); // Change to 4
   }
 
   @override
@@ -35,10 +42,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
     super.dispose();
   }
 
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+    _tabController.animateTo(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => FavCubit())],
+      providers: [
+        BlocProvider(create: (context) => FavCubit()..getFavorites()),
+        BlocProvider(create: (context) => CartCubit()..getCart()),
+      ],
       child: Scaffold(
         body: BottomBar(
           borderRadius: BorderRadius.circular(30),
@@ -59,7 +76,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
           onBottomBarHidden: () {},
           onBottomBarShown: () {},
           body: (context, controller) =>
-              TabBarView(controller: _tabController, children: _screens),
+              IndexedStack(index: _currentIndex, children: _screens),
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -79,6 +96,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
             ),
             child: TabBar(
               controller: _tabController,
+              onTap: _onTabTapped, // إضافة التحكم في التنقل
               indicator: BoxDecoration(
                 color: Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20),
@@ -97,11 +115,39 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
               ),
-              tabs: const [
+              tabs: [
                 Tab(icon: Icon(Icons.home_outlined, size: 24), text: 'Home'),
-                Tab(
-                  icon: Icon(Icons.favorite_border, size: 24),
-                  text: 'Favorites',
+                BlocBuilder<FavCubit, FavState>(
+                  builder: (context, favState) {
+                    int favCount = 0;
+                    if (favState is FavLoaded) {
+                      favCount = favState.list.length;
+                    }
+                    return Tab(
+                      icon: BadgeIcon(
+                        icon: Icons.favorite_border,
+                        count: favCount,
+                        iconSize: 24,
+                      ),
+                      text: 'Favorites',
+                    );
+                  },
+                ),
+                BlocBuilder<CartCubit, CartState>(
+                  builder: (context, cartState) {
+                    int cartCount = 0;
+                    if (cartState is CartLoaded) {
+                      cartCount = cartState.list.length;
+                    }
+                    return Tab(
+                      icon: BadgeIcon(
+                        icon: Icons.shopping_cart_outlined,
+                        count: cartCount,
+                        iconSize: 24,
+                      ),
+                      text: 'Cart',
+                    );
+                  },
                 ),
                 Tab(
                   icon: Icon(Icons.person_outline, size: 24),

@@ -1,4 +1,3 @@
-import 'package:api_cubit_task/core/features/cart/view/screen/cart_screen.dart';
 import 'package:api_cubit_task/core/features/home/cubit/lap_cubit.dart';
 import 'package:api_cubit_task/core/features/home/cubit/lap_state.dart';
 import 'package:api_cubit_task/core/features/home/view/widget/lap_card.dart';
@@ -54,30 +53,7 @@ class HomeScreen extends StatelessWidget {
                         tooltip: 'Search',
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CartScreen(),
-                            ),
-                          );
-                        },
-                        tooltip: 'Shopping Cart',
-                      ),
-                    ),
+
                     const SizedBox(width: 20),
                   ],
                 ),

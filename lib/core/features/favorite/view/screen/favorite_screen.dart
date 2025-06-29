@@ -35,12 +35,35 @@ class FavoriteScreen extends StatelessWidget {
           ),
         ),
       ),
-      
+
       body: BlocBuilder<FavCubit, FavState>(
         builder: (context, state) {
           if (state is FavLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is FavLoaded) {
+            if (state.list.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.favorite_border, size: 100, color: Colors.grey),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'No favorites yet',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Add some favorites and they will appear here',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              );
+            }
             return ListView.builder(
               padding: const EdgeInsets.only(top: 8, bottom: 120),
 
@@ -71,67 +94,25 @@ class FavoriteScreen extends StatelessWidget {
             );
           }
 
-          return _buildEmptyState(context);
-        },
-      ),
-    );
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.grey[50]!, Colors.white],
-        ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(40),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.pink[100]!, Colors.purple[100]!],
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.favorite_border, size: 100, color: Colors.grey),
+                const SizedBox(height: 20),
+                const Text(
+                  'No favorites yet',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.pink.withOpacity(0.3),
-                    blurRadius: 20,
-                    spreadRadius: 5,
-                  ),
-                ],
-              ),
-              child: Icon(
-                Icons.favorite_border,
-                size: 80,
-                color: Colors.pink[400],
-              ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Add some favorites and they will appear here',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
             ),
-            const SizedBox(height: 32),
-            const Text(
-              'No Favorites Yet',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Start adding your favorite laptops\nto see them here',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

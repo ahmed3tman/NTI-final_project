@@ -1,5 +1,5 @@
 import 'package:api_cubit_task/core/features/home/cubit/lap_state.dart';
-import 'package:api_cubit_task/core/features/home/model/lap_data.dart';
+import 'package:api_cubit_task/core/features/home/data/lap_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LapCubit extends Cubit<LapState> {

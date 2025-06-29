@@ -17,7 +17,6 @@ class FavLoaded extends FavState {
     this.addingItems = const {},
   });
 
-  // دالة لإنشاء نسخة جديدة مع تعديل العناصر اللي بيتم حذفها أو إضافتها
   FavLoaded copyWith({
     List<LapModel>? list,
     Set<String>? deletingItems,
