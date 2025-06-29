@@ -1,4 +1,4 @@
-import 'package:api_cubit_task/core/features/view/main_navigation_screen.dart';
+import 'package:api_cubit_task/core/features/home/view/widget/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -31,12 +31,12 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 1500),
     );
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, -1.5),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.forward();
     _navigateToHome();
@@ -114,21 +114,21 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
               ),
               const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    strokeWidth: 2.5,
-                  ),
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.all(12),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white.withOpacity(0.1),
+              //     borderRadius: BorderRadius.circular(30),
+              //   ),
+              //   child: const SizedBox(
+              //     width: 24,
+              //     height: 24,
+              //     child: CircularProgressIndicator(
+              //       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              //       strokeWidth: 2.5,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

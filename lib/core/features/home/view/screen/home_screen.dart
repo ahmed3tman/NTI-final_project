@@ -1,4 +1,5 @@
-import 'package:api_cubit_task/core/features/cubit/user_cubit.dart';
+import 'package:api_cubit_task/core/features/cart/view/screen/cart_screen.dart';
+import 'package:api_cubit_task/core/features/home/cubit/lap_cubit.dart';
 import 'package:api_cubit_task/core/features/home/cubit/lap_state.dart';
 import 'package:api_cubit_task/core/features/home/view/widget/lap_card.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      
       create: (context) => LapCubit()..getLaps(),
       child: Scaffold(
         backgroundColor: Colors.grey[50],
@@ -25,57 +25,62 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             child: SafeArea(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      Icon(Icons.laptop_mac, color: Colors.white, size: 26),
-                      const SizedBox(width: 12),
-                      const Text(
-                        'Laptop Store',
-                        style: TextStyle(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 20),
+                    Icon(Icons.laptop_mac, color: Colors.white, size: 26),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'Laptop Store',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.search, color: Colors.white),
+                        onPressed: () {},
+                        tooltip: 'Search',
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.shopping_cart_outlined,
                           color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26,
                         ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CartScreen(),
+                            ),
+                          );
+                        },
+                        tooltip: 'Shopping Cart',
                       ),
-                      const Spacer(),
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.search, color: Colors.white),
-                          onPressed: () {},
-                          tooltip: 'Search',
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {},
-                          tooltip: 'Shopping Cart',
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                ],
+                    ),
+                    const SizedBox(width: 20),
+                  ],
+                ),
               ),
             ),
           ),
@@ -83,66 +88,15 @@ class HomeScreen extends StatelessWidget {
         body: BlocBuilder<LapCubit, LapState>(
           builder: (context, state) {
             if (state is LapLoading) {
-              return Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.grey[50]!, Colors.white],
-                  ),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.purple.withOpacity(0.1),
-                              blurRadius: 20,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Color(0xFF667eea),
-                          ),
-                          strokeWidth: 3,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'Loading laptops...',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (state is LapLoaded) {
               return ListView.builder(
-                padding: const EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 8, bottom: 120),
                 itemCount: state.lapList.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 5,
-                    ),
-
-                    child: LapCard(laptop: state.lapList[index]),
-                  );
+                  return LapCard(laptop: state.lapList[index]);
                 },
               );
             } else {

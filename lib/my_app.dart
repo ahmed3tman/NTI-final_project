@@ -1,3 +1,4 @@
+import 'package:api_cubit_task/core/features/cart/view/screen/cart_screen.dart';
 import 'package:api_cubit_task/core/features/favorite/cubit/fav_cubit.dart';
 import 'package:api_cubit_task/core/features/home/view/screen/splash_sreen.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
       create: (context) => FavCubit()..getFavorites(),
       child: MaterialApp(
         routes: {
-          // 'details': (context) => const DetailsScreen(),
+          'cart' : (context) => const CartScreen(),
+
         },
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),

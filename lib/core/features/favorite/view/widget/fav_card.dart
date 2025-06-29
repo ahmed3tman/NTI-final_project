@@ -1,25 +1,28 @@
 import 'package:api_cubit_task/core/features/details/view/screen/details_screen.dart';
+import 'package:api_cubit_task/core/features/favorite/cubit/fav_cubit.dart';
+import 'package:api_cubit_task/core/features/favorite/cubit/fav_state.dart';
 import 'package:api_cubit_task/core/features/favorite/view/widget/delete_button.dart';
 import 'package:api_cubit_task/core/features/home/model/lap_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LapCard extends StatefulWidget {
-  const LapCard({super.key, required this.laptop});
+class FavCard extends StatefulWidget {
+  const FavCard({super.key, required this.laptop});
 
   final LapModel laptop;
 
   @override
-  State<LapCard> createState() => _LapCardState();
+  State<FavCard> createState() => _FavCardState();
 }
 
-class _LapCardState extends State<LapCard> {
+class _FavCardState extends State<FavCard> {
   @override
   Widget build(BuildContext context) {
     final laptop = widget.laptop;
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
@@ -84,8 +87,14 @@ class _LapCardState extends State<LapCard> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          //================================================
-                          FavoriteButton(laptopId: laptop.id),
+                          BlocBuilder<FavCubit, FavState>(
+                            builder: (context, state) {
+                              return FavoriteButton(
+                                laptopId: widget.laptop.id,
+                                isInFavoriteScreen: true,
+                              );
+                            },
+                          ),
                         ],
                       ),
                       Text(
