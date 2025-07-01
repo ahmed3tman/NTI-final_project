@@ -1,4 +1,4 @@
-import 'package:api_cubit_task/core/features/home/view/screen/splash_sreen.dart';
+import 'package:api_cubit_task/features/home/view/screen/splash_sreen.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: const SplashApp(),
     );
   }
 }
